@@ -1,0 +1,35 @@
+name: Build iOS IPA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npx cap add ios
+      - run: npx cap sync ios
+      - name: Tam ekran ayari
+        run: |
+          /usr/libexec/PlistBuddy -c "Add :UIRequiresFullScreen bool true" ios/App/App/Info.plist || true
+      - name: Derle (imzasiz)
+        run: |
+          xcodebuild -workspace ios/App/App.xcworkspace -scheme App \
+            -configuration Release -sdk iphoneos -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+      - name: IPA paketle
+        run: |
+          mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/App.app Payload/
+          zip -r Penalti.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Penalti-ipa
+          path: Penalti.ipa
