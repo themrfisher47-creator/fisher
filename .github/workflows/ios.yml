@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: macos-14
+    defaults:
+      run:
+        working-directory: penalti-ipa
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,4 +35,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Penalti-ipa
-          path: Penalti.ipa
+          path: penalti-ipa/Penalti.ipa
