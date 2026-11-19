@@ -1,0 +1,6 @@
+{
+  "appId": "com.senin.penalti",
+  "appName": "Penalti Retro",
+  "webDir": "www",
+  "ios": { "contentInset": "never" }
+}
